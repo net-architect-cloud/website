@@ -166,3 +166,340 @@ a:focus-visible, button:focus-visible, input:focus-visible, [tabindex]:focus-vis
 
   &:focus
     top: 0.5rem
+
+// ============================================================
+// Home redesign — "terminal manifest" hero + featured posts
+// ============================================================
+
+// Self-hosted JetBrains Mono (OFL) — technical accent typography, home only.
+@font-face
+  font-family: 'JetBrains Mono'
+  font-style: normal
+  font-weight: 400
+  font-display: swap
+  src: url('/fonts/JetBrainsMono-400.woff2') format('woff2')
+
+@font-face
+  font-family: 'JetBrains Mono'
+  font-style: normal
+  font-weight: 500
+  font-display: swap
+  src: url('/fonts/JetBrainsMono-500.woff2') format('woff2')
+
+html
+  --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace
+
+// --- Hero ---------------------------------------------------
+
+.home_hero
+  position: relative
+  isolation: isolate
+  overflow: hidden
+  text-align: center
+  padding: clamp(3rem, 8vw, 6rem) 1.5rem clamp(3.5rem, 7vw, 5.5rem)
+  // Always-dark "manifest" band, independent of the site's light/dark mode.
+  background: #121317
+  color: #ededed
+  border-bottom: 1px solid #26282e
+
+  // blueprint-grid backdrop, masked to fade out at the edges
+  .home_hero_grid
+    position: absolute
+    inset: 0
+    z-index: -2
+    background-image: linear-gradient(rgba(255, 255, 255, 0.045) 1px, transparent 1px), linear-gradient(90deg, rgba(255, 255, 255, 0.045) 1px, transparent 1px)
+    background-size: 46px 46px
+    background-position: center top
+    -webkit-mask-image: radial-gradient(ellipse 85% 75% at 50% 32%, #000 38%, transparent 100%)
+    mask-image: radial-gradient(ellipse 85% 75% at 50% 32%, #000 38%, transparent 100%)
+
+  // accent glows for depth
+  &::after
+    content: ''
+    position: absolute
+    inset: 0
+    z-index: -1
+    pointer-events: none
+    background: radial-gradient(38rem 22rem at 30% 16%, rgba(55, 148, 255, 0.16), transparent 60%), radial-gradient(34rem 20rem at 74% 30%, rgba(177, 128, 215, 0.13), transparent 60%)
+
+.home_hero_inner
+  max-width: 46rem
+  margin: 0 auto
+  display: flex
+  flex-direction: column
+  align-items: center
+  gap: 1.4rem
+
+.whoami
+  font-family: var(--font-mono)
+  font-size: 0.82rem
+  line-height: 1.85
+  text-align: left
+  display: inline-flex
+  flex-direction: column
+  padding: 1rem 1.4rem
+  border: 1px solid $border-dark
+  border-radius: 0.7rem
+  background: rgba(255, 255, 255, 0.025)
+  -webkit-backdrop-filter: blur(3px)
+  backdrop-filter: blur(3px)
+  box-shadow: 0 1rem 3rem rgba(0, 0, 0, 0.35)
+
+.whoami_cmd
+  color: $theme
+  margin-bottom: 0.35rem
+
+.whoami_path
+  color: $secondary
+
+.whoami_out
+  color: var(--light)
+
+  &::before
+    content: '→ '
+    color: $theme
+    opacity: 0.7
+
+.whoami_dim
+  opacity: 0.55
+
+.hero_name
+  margin: 0
+  font-size: clamp(2.6rem, 9vw, 5rem)
+  line-height: 1.02
+  font-weight: 700
+  letter-spacing: -0.02em
+  background: linear-gradient(100deg, #fff 0%, #cfe1ff 36%, $theme 70%, $secondary 100%)
+  -webkit-background-clip: text
+  background-clip: text
+  color: transparent
+
+.hero_tagline
+  margin: 0
+  font-size: clamp(1.15rem, 3.5vw, 1.7rem)
+  font-weight: 500
+  color: var(--light)
+
+.hero_sub
+  max-width: 34rem
+  margin: 0
+  line-height: 1.6
+  color: var(--light)
+  opacity: 0.66
+
+.hero_stack
+  display: flex
+  flex-wrap: wrap
+  justify-content: center
+  gap: 0.5rem
+  margin: 0.4rem 0 0
+  padding: 0
+
+  li
+    font-family: var(--font-mono)
+    font-size: 0.74rem
+    letter-spacing: 0.02em
+    padding: 0.32rem 0.7rem
+    border: 1px solid rgba(55, 148, 255, 0.28)
+    border-radius: 2rem
+    color: var(--light)
+    background: rgba(55, 148, 255, 0.07)
+
+    &::before
+      content: '‹ '
+      color: $theme
+      opacity: 0.7
+
+    &::after
+      content: ' ›'
+      color: $theme
+      opacity: 0.7
+
+.hero_cta
+  display: flex
+  flex-wrap: wrap
+  justify-content: center
+  gap: 0.7rem
+  margin-top: 0.8rem
+
+.hero_btn
+  font-family: var(--font-mono)
+  font-size: 0.85rem
+  padding: 0.6rem 1.2rem
+  border-radius: 0.55rem
+  border: 1px solid $border-dark
+  color: var(--light)
+  transition: transform 0.15s ease, border-color 0.15s ease, filter 0.15s ease
+
+  &:hover
+    transform: translateY(-2px)
+    border-color: $theme
+
+  &--primary
+    background: linear-gradient(100deg, $theme, $secondary)
+    border-color: transparent
+    color: #fff
+
+    &:hover
+      border-color: transparent
+      filter: brightness(1.08)
+
+// --- Featured posts -----------------------------------------
+
+.home_wrap
+  max-width: 70rem
+  margin: 0 auto
+  padding: 0 1.5rem
+
+.home_feature
+  padding-bottom: 3.5rem
+
+.home_sec_title
+  display: flex
+  align-items: center
+  gap: 0.55rem
+  margin: 0 0 1.4rem
+  font-family: var(--font-mono)
+  font-size: 1rem
+  font-weight: 500
+  letter-spacing: 0.05em
+  text-transform: uppercase
+
+.home_sec_mark
+  color: $secondary
+
+.feature_grid
+  display: grid
+  grid-template-columns: 1.5fr 1fr
+  gap: 1.2rem
+
+.fcard
+  background: var(--post-bg)
+  border: 1px solid $border-dark
+  border-radius: 0.8rem
+  overflow: hidden
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease
+
+  &:hover
+    transform: translateY(-3px)
+    box-shadow: 0 0.6rem 1.6rem rgba(0, 0, 0, 0.3)
+    border-color: rgba(55, 148, 255, 0.4)
+
+.fcard_link
+  display: block
+  color: inherit
+
+.fcard_media
+  aspect-ratio: 16 / 8
+  overflow: hidden
+
+  img
+    width: 100%
+    height: 100%
+    object-fit: cover
+    display: block
+
+.fcard_body
+  padding: 1.1rem 1.2rem 1.3rem
+
+.fcard_meta
+  display: flex
+  align-items: center
+  gap: 0.5rem
+  margin: 0 0 0.5rem
+  font-family: var(--font-mono)
+  font-size: 0.72rem
+  color: var(--light)
+  opacity: 0.6
+
+.fcard_tag
+  padding: 0.1rem 0.5rem
+  border-radius: 1rem
+  background: rgba(177, 128, 215, 0.14)
+  color: $secondary
+  opacity: 0.9
+
+.fcard_title
+  margin: 0 0 0.5rem
+  font-size: 1.35rem
+  line-height: 1.25
+
+.fcard_excerpt
+  margin: 0 0 0.8rem
+  font-size: 0.95rem
+  line-height: 1.55
+  color: var(--light)
+  opacity: 0.7
+
+.fcard_more
+  font-family: var(--font-mono)
+  font-size: 0.8rem
+  color: $theme
+
+.feature_side
+  display: flex
+  flex-direction: column
+  gap: 1.2rem
+
+.fcard--mini
+  .fcard_link
+    display: flex
+    align-items: stretch
+
+  .fcard_media--mini
+    flex: 0 0 38%
+    aspect-ratio: auto
+    min-height: 100%
+
+  .fcard_body
+    padding: 0.85rem 1rem
+
+  .fcard_title
+    font-size: 1rem
+    margin: 0
+
+.home_all
+  display: inline-block
+  margin-top: 1.6rem
+  font-family: var(--font-mono)
+  font-size: 0.85rem
+  color: $theme
+
+  &:hover
+    color: $secondary
+
+@media (max-width: 760px)
+  .feature_grid
+    grid-template-columns: 1fr
+
+  .fcard--mini .fcard_link
+    display: block
+
+  .fcard--mini .fcard_media--mini
+    aspect-ratio: 16 / 8
+
+// One orchestrated page-load reveal (disabled for reduced-motion users).
+@media (prefers-reduced-motion: no-preference)
+  .home_hero_inner > *
+    animation: heroReveal 0.7s cubic-bezier(0.2, 0.7, 0.2, 1) backwards
+
+  .whoami
+    animation-delay: 0.05s
+  .hero_name
+    animation-delay: 0.14s
+  .hero_tagline
+    animation-delay: 0.22s
+  .hero_sub
+    animation-delay: 0.3s
+  .hero_stack
+    animation-delay: 0.38s
+  .hero_cta
+    animation-delay: 0.46s
+
+@keyframes heroReveal
+  from
+    opacity: 0
+    transform: translateY(14px)
+  to
+    opacity: 1
+    transform: translateY(0)

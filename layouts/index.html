@@ -1,0 +1,95 @@
+{{/* Custom home (redesign): "terminal manifest" hero + featured posts.
+     Replaces the theme's archive list on the home only; /posts keeps clarity. */}}
+{{ define "main" }}
+{{- $posts := where site.RegularPages "Type" "in" site.Params.mainSections -}}
+{{- $lead := "" -}}
+{{- $rest := slice -}}
+{{- if gt (len $posts) 0 -}}
+  {{- $lead = index $posts 0 -}}
+  {{- if gt (len $posts) 1 -}}
+    {{- $rest = first 3 (after 1 $posts) -}}
+  {{- end -}}
+{{- end -}}
+
+<section class="home_hero" aria-label="Présentation">
+  <div class="home_hero_grid" aria-hidden="true"></div>
+  <div class="home_hero_inner">
+    <div class="whoami">
+      <span class="whoami_cmd"><span class="whoami_path">~/</span> whoami</span>
+      <span class="whoami_out">Kevin Allioli</span>
+      <span class="whoami_out">architecte cloud <span class="whoami_dim">@ Infomaniak</span></span>
+      <span class="whoami_out">formateur indépendant <span class="whoami_dim">· open source</span></span>
+      <span class="whoami_out">Haute-Savoie <span class="whoami_dim">· près de Genève</span></span>
+    </div>
+
+    <h1 class="hero_name">Kevin Allioli</h1>
+    <p class="hero_tagline">Le cloud open source, expliqué.</p>
+    <p class="hero_sub">J'architecture, déploie et enseigne OpenStack, Ceph et l'infrastructure qui tient en production.</p>
+
+    <ul class="hero_stack" aria-label="Domaines d'expertise">
+      {{- range slice "openstack" "ceph" "terraform" "ansible" "docker" "cloud-init" }}
+      <li>{{ . }}</li>
+      {{- end }}
+    </ul>
+
+    <nav class="hero_cta" aria-label="Liens principaux">
+      <a class="hero_btn hero_btn--primary" href="{{ "posts/" | relLangURL }}">Lire le blog</a>
+      <a class="hero_btn" href="https://www.youtube.com/channel/UCprX4LgBZkGr6hcyy5NSgoQ" target="_blank" rel="noopener noreferrer">YouTube</a>
+      <a class="hero_btn" href="mailto:kevin@netarchitect.cloud">Contact</a>
+    </nav>
+  </div>
+</section>
+
+{{- with $lead }}
+<section class="home_feature home_wrap" aria-labelledby="home_feat_title">
+  <h2 class="home_sec_title" id="home_feat_title"><span class="home_sec_mark">◆</span> En vedette</h2>
+
+  <div class="feature_grid">
+    <article class="fcard fcard--lead">
+      <a class="fcard_link" href="{{ .Permalink }}">
+        {{- with .Params.thumbnail }}
+        <div class="fcard_media">
+          <img src="{{ . | absURL }}" alt="" loading="eager" decoding="async" fetchpriority="high">
+        </div>
+        {{- end }}
+        <div class="fcard_body">
+          <p class="fcard_meta">
+            <time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "2" }} {{ .Date.Format "January" | i18n }} {{ .Date.Format "2006" }}</time>
+            {{- with .Params.tags }} <span class="fcard_tag">{{ index . 0 }}</span>{{ end }}
+          </p>
+          <h3 class="fcard_title">{{ .Title }}</h3>
+          {{- with (or .Params.abstract .Params.summary) }}
+          <p class="fcard_excerpt">{{ . | truncate 180 }}</p>
+          {{- end }}
+          <span class="fcard_more">Lire l'article →</span>
+        </div>
+      </a>
+    </article>
+
+    {{- with $rest }}
+    <div class="feature_side">
+      {{- range . }}
+      <article class="fcard fcard--mini">
+        <a class="fcard_link" href="{{ .Permalink }}">
+          {{- with .Params.thumbnail }}
+          <div class="fcard_media fcard_media--mini">
+            <img src="{{ . | absURL }}" alt="" loading="lazy" decoding="async">
+          </div>
+          {{- end }}
+          <div class="fcard_body">
+            <p class="fcard_meta">
+              <time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "2" }} {{ .Date.Format "January" | i18n }} {{ .Date.Format "2006" }}</time>
+            </p>
+            <h3 class="fcard_title">{{ .Title }}</h3>
+          </div>
+        </a>
+      </article>
+      {{- end }}
+    </div>
+    {{- end }}
+  </div>
+
+  <a class="home_all" href="{{ "posts/" | relLangURL }}">Tous les billets →</a>
+</section>
+{{- end }}
+{{ end }}
