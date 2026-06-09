@@ -5,23 +5,8 @@
 
 [[main]]
   name = "Archives"
-  url = "post/rich-content/"
+  url = "posts/"
   weight = -109
-
-
-# Submenus are done this way: parent -> identifier
-[[main]]
-  name = "Links"
-  identifier = "Links"
-  weight = -108
-[[main]]
-  parent = "Links"
-  name = "LinkedIn"
-  url = "https://www.linkedin.com/kevin.allioli"
-[[main]]
-  parent = "Links"
-  name = "X"
-  url = "https://x.com/"
 
 [[main]]
   name = "À propos"
@@ -36,20 +21,12 @@
   weight = 1
   url = "https://github.com/Net-Architect-Cloud"
 [[social]]
-  name = "X"
-  weight = 4
-  url = "https://x.com/#"
-[[social]]
   name = "linkedin"
-  weight = 3
+  weight = 2
   url = "https://www.linkedin.com/in/kevin-allioli"
 [[social]]
-  name = "youtube"
-  weight = 2
-  url = "https://www.youtube.com/#"
-[[social]]
   name = "rss"
-  weight = 5
+  weight = 3
   url = "index.xml"
 
 # other supported social links
