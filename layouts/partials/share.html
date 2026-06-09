@@ -1,0 +1,20 @@
+{{- /* Local override of hugo-clarity's share.html.
+       Only change: add rel="noopener noreferrer" to the target="_blank" share
+       links (Twitter/X, Facebook) to drop window.opener access and referrer
+       leakage. The LinkedIn (#anchor) and copy-link entries are unchanged. */ -}}
+  {{- $s := T "share_on" }}
+  <div class="post_share">
+    {{ $s }}:
+    <a href="https://twitter.com/intent/tweet?text={{ .Title }}&url={{ .Permalink }}&tw_p=tweetbutton" class="twitter" title="{{ $s }} Twitter" target="_blank" rel="nofollow noopener noreferrer">
+      {{ partial "sprite" (dict "icon" "twitter") }}
+    </a>
+    <a href="https://www.facebook.com/sharer.php?u={{ .Permalink }}&t={{ .Title }}" class="facebook" title="{{ $s }} Facebook" target="_blank" rel="nofollow noopener noreferrer">
+      {{ partial "sprite" (dict "icon" "facebook") }}
+    </a>
+    <a href="#linkedinshare" id = "linkedinshare" class="linkedin" title="{{ $s }} LinkedIn" rel="nofollow">
+      {{ partial "sprite" (dict "icon" "linkedin") }}
+    </a>
+    <a href="{{ .Permalink }}" title="Copy Link" class="link link_yank">
+      {{ partial "sprite" (dict "icon" "copy") }}
+    </a>
+  </div>
