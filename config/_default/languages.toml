@@ -1,6 +1,6 @@
 [fr]
-  languageName = "Français"
+  label = "Français"
   weight = 1
   title = "Net Architect"
-  languageCode = "fr"
+  locale = "fr"
   contentDir = "content"
