@@ -1,5 +1,6 @@
-{{- /* Local override: .Site.Data was deprecated in Hugo v0.156+.
-       Uses hugo.Data instead. Rest is the hugo-clarity template. */ -}}
+{{- /* Local override: .Site.Data was deprecated in Hugo v0.156+ (uses hugo.Data).
+       Also adds aria-label to the icon-only social links so they have an
+       accessible name for screen readers (WCAG 4.1.2). */ -}}
 {{- $base := absURL "" }}
 {{- $items := hugo.Data.social }}
 {{- $social := .Site.Menus.social }}
@@ -17,7 +18,7 @@
   {{- if and (eq (hasPrefix $url $base) false) (eq (hasPrefix $url "http") false) }}
     {{ $url = absLangURL $url }}
   {{- end }}
-  <a href="{{ $url }}">
+  <a href="{{ $url }}" aria-label="{{ $label }}">
     {{ partial "sprite" (dict "icon" $label) }}
   </a>
   {{- end }}

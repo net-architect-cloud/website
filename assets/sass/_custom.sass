@@ -141,3 +141,28 @@ html[data-mode="dim"] .bio-box
   .excerpt_thumbnail
     display: block
     margin-bottom: 1rem
+
+// Accessibility (Phase 4)
+
+// Visible keyboard focus ring. _base.sass removes outlines with
+// `a:focus { outline: none !important }`; :focus-visible restores a ring for
+// keyboard users only (not mouse clicks). Specificity matches `a:focus` and
+// _custom is imported last, so this wins the !important cascade.
+a:focus-visible, button:focus-visible, input:focus-visible, [tabindex]:focus-visible, summary:focus-visible
+  outline: 2px solid $theme !important
+  outline-offset: 2px
+
+// Skip-to-content link: visually hidden until it receives keyboard focus.
+.skip_link
+  position: absolute
+  left: 0.5rem
+  top: -4rem
+  z-index: 1000
+  padding: 0.5rem 1rem
+  background: $theme
+  color: #fff
+  border-radius: 0.5rem
+  transition: top 0.2s ease
+
+  &:focus
+    top: 0.5rem

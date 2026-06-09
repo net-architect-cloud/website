@@ -1,0 +1,26 @@
+{{- /* Local override of hugo-clarity's search/widget.html.
+       Only a11y change: add aria-label to the search input. The theme's only
+       label is icon-only (an SVG sprite), so the input had no reliable accessible
+       name (WCAG 4.1.2). Rest is identical to the theme template. */ -}}
+{{- $params := site.Params }}
+{{- if site.Params.enableSearch }}
+  {{- $placeholder :=  T "search_field_placeholder" }}
+  {{- $section := $.Page.Section }}
+  {{- $simple := true }}
+  {{- if and (eq $section "support") (eq .CurrentSection .FirstSection) }}
+  {{- else }}
+    {{- $placeholder =  T "blog_search_field_placeholder" }}
+    {{- $simple = false }}
+  {{ end }}
+  <div class="search">
+    <input type="search" class="search_field form_field" placeholder='{{ $placeholder }}' aria-label='{{ $placeholder }}' id="find" autocomplete="off" data-scope='{{ .Section }}'>
+    <label for="find" class="search_label">
+      {{- partial "sprite" (dict "icon" "search") }}
+    </label>
+    {{ if $simple }}
+    {{ end }}
+    {{- if ne .Params.searchPage true }}
+    <div class="search_results results"></div>
+    {{- end }}
+  </div>
+{{- end }}

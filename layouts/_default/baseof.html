@@ -1,0 +1,46 @@
+{{- /* Local override of hugo-clarity's baseof.html.
+       Only a11y additions vs theme: a skip-to-content link as the first focusable
+       element in <body>, and a matching id="main" on <main> (WCAG 2.4.1). The rest
+       is identical to the theme template. */ -}}
+{{- $s := site.Params }}
+{{- $p := .Params }}
+{{- $codeBlockConfig := partial "func/getCodeBlockSettings" . }}
+<!DOCTYPE html>
+<html
+  lang="{{ .Lang }}"
+  data-figures="{{ $p.figurePositionShow }}"
+  {{ if .IsPage }}
+    class="page"
+  {{ else if .IsHome }}
+    class="home"
+  {{ end }}
+  {{ with $s.enforceLightMode }}
+    data-mode="lit"
+  {{ end }}
+  {{ with $s.enforceDarkMode }}
+    data-mode="dim"
+  {{ end -}}
+>
+  <head>
+    {{- partial "head" . }}
+    {{- partial "hooks/head-end" . }}
+  </head>
+  <body
+    data-code="{{ $codeBlockConfig.max }}"
+    data-lines="{{ $codeBlockConfig.lines }}"
+    id="documentTop"
+    data-lang="{{ .Lang }}"
+  >
+    <a href="#main" class="skip_link">{{ T "skip_to_content" }}</a>
+    {{- partialCached "scripts/google/tag-manager" (dict "noscript" true) }}
+    {{- partial "header" . }}
+    <main id="main">
+      {{- block "main" . }}{{ end }}
+    </main>
+
+    {{- partialCached "icons" . }}
+    {{- partialCached "footer" . }}
+    {{- partialCached "scripts/index" . }}
+    {{- partialCached "hooks/body-end" . }}
+  </body>
+</html>
