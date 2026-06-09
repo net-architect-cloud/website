@@ -1,0 +1,78 @@
+{{- /* Local override of hugo-clarity's image.html — cherry-pick of upstream
+       commit 05ae025 / PR #522 (not yet in our pinned theme version):
+       - use .Page.Resources.GetMatch (not .Resources.GetMatch) so it works when
+         image.html is called with a dict context (e.g. via excerpt.html);
+       - guard local SVG resources (no .Width/.Height in Hugo);
+       - fall back to bundle=false when the resource isn't found (e.g. static/).
+       Drop this override once the theme is bumped past 2026-04-21. */ -}}
+{{- $file := .file -}}
+{{- $imagesDir := .Page.Site.Params.imagesDir -}}
+{{- $alt := .alt -}}
+{{- if not $alt -}}
+  {{- $alt = .Text -}}
+{{- end -}}
+{{- $cap := .cap -}}
+{{- $scratch := newScratch -}}
+{{- $scratch.Set "classes" "image_figure" -}}
+
+{{/* Add classes for image type */}}
+{{- $typeClass := "" -}}
+{{- with .type -}}
+  {{- $typeClass = printf "%s" . | printf "%s%s" " image_" | printf "%s" -}}
+{{- end -}}
+{{- $scratch.Add "classes" $typeClass -}}
+
+{{/* Determine if page bundles are set. */}}
+{{- $bundle := .Page.Site.Params.usePageBundles -}}
+{{- if eq .Page.Params.usePageBundles false -}}
+  {{- $bundle = false -}}
+{{- end -}}
+{{- if eq .Page.Params.usePageBundles true -}}
+  {{- $bundle = true -}}
+{{- end -}}
+
+{{/* Determine source of image and get attributes. */}}
+{{- $image := "" -}}
+{{- if strings.HasPrefix $file "http" -}}
+  {{- $scratch.Add "classes" " image_external" -}}
+  {{- $image = resources.GetRemote $file -}}
+  {{- with $image }}
+    {{- if eq $image.MediaType.MainType "image" -}}
+      {{- if eq $image.MediaType.SubType "svg" -}}
+        {{- $image = "" -}}
+        {{- $scratch.Add "classes" " image_svg" -}}
+      {{- else -}}
+        {{- $file = path.Join $imagesDir $image -}}
+        {{- $image = $image.Content | resources.FromString $file -}}
+      {{- end -}}
+    {{- else -}}
+      {{- $image = "" -}}
+    {{- end -}}
+  {{- end -}}
+{{- else -}}
+  {{- $scratch.Add "classes" " image_internal" -}}
+  {{ $file = (path.Clean $file) }}
+  {{- if eq $bundle true -}}
+    {{ $image = .Page.Resources.GetMatch $file }}
+    {{- if $image -}}
+      {{- if eq $image.MediaType.SubType "svg" -}}
+        {{- $image = "" -}}
+        {{- $scratch.Add "classes" " image_svg" -}}
+      {{- end -}}
+    {{- else -}}
+      {{- $bundle = false -}}
+    {{- end -}}
+  {{- end -}}
+{{- end -}}
+
+{{- partial "figure" (
+  dict
+    "file" $file
+    "image" $image
+    "diskPath" $.Page.File.Dir
+    "webPath" $.Page.RelPermalink
+    "alt" $alt
+    "cap" $cap
+    "classes" ($scratch.Get "classes")
+    "bundle" $bundle
+) -}}
