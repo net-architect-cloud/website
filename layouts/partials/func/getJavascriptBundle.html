@@ -1,0 +1,31 @@
+<!-- Local override of hugo-clarity's getJavascriptBundle.html.
+     Changes vs theme:
+     1. Drop the bundled highlight.js (v9.17.1, EOL 2020): syntax highlighting is
+        already done server-side by Hugo/Chroma (markup.highlight in hugo.toml),
+        so the client lib was a ~12 KB redundant duplicate.
+     2. index.js still calls hljs.initHighlightingOnLoad(); a tiny no-op stub keeps
+        that call safe without re-introducing the library.
+     3. custom.js resolves through Hugo's union asset filesystem (a project-level
+        assets/js/custom.js automatically overrides the theme's), so the theme's
+        broken fileExists/"../../" dance is dropped. -->
+{{ $hljsStub := "window.hljs=window.hljs||{initHighlightingOnLoad:function(){}};" | resources.FromString "js/hljs-stub.js" }}
+
+{{ $variablesScriptPath := "js/variables.js" }}
+{{ $variables := resources.Get $variablesScriptPath | resources.ExecuteAsTemplate (printf "%s/js/variables.js" .Lang) . }}
+
+{{ $functionsScriptPath := "js/functions.js" }}
+{{ $functions := resources.Get $functionsScriptPath | resources.ExecuteAsTemplate $functionsScriptPath . }}
+
+{{ $codeScriptPath := "js/code.js" }}
+{{ $code := resources.Get $codeScriptPath | resources.ExecuteAsTemplate $codeScriptPath . }}
+
+{{ $customScriptPath := "js/custom.js" }}
+{{ $custom := resources.Get $customScriptPath | resources.ExecuteAsTemplate $customScriptPath . }}
+
+{{ $mainScriptPath := "js/index.js" }}
+{{ $main := resources.Get $mainScriptPath | resources.ExecuteAsTemplate $mainScriptPath . }}
+
+{{ $bundlePath := (printf "%s/js/bundle.js" .Lang ) }}
+{{ $bundle := slice $hljsStub $variables $functions $code $main $custom | resources.Concat $bundlePath | resources.Fingerprint "sha512" }}
+
+{{ return $bundle }}
