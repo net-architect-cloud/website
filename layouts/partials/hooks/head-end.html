@@ -1,0 +1,11 @@
+{{- /* Injected into <head> via the theme's hooks/head-end (wired in baseof.html).
+       Preload the two Metropolis weights used by above-the-fold text (body 400,
+       headings 700) so they arrive before first paint and shrink the
+       font-display:swap flash / layout shift. Posts have no hero image, so text
+       is the LCP — preloading the bundles (already done by head.html) plus these
+       fonts covers it.
+       crossorigin is mandatory: @font-face always fetches in anonymous CORS mode,
+       and the preload must match that mode (and URL) or the file is fetched twice.
+       URLs resolve to /fonts/... — the same target as the CSS's url("../fonts/..."). */ -}}
+<link rel="preload" href="{{ "fonts/Metropolis-Regular.woff2" | absURL }}" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="{{ "fonts/Metropolis-Bold.woff2" | absURL }}" as="font" type="font/woff2" crossorigin>
