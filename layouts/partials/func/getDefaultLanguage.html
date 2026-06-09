@@ -1,0 +1,14 @@
+{{- /* Local override: site.LanguageCode was deprecated in Hugo v0.158+.
+       Uses site.Language.Locale instead. Rest is the hugo-clarity template. */ -}}
+{{ $defaultLanguage := site.Language.Locale }}
+{{ if hugo.IsMultilingual }}
+  {{ $languages := site.Languages }}
+  {{ $order := slice }}
+  {{ range $languages }}
+    {{ $order = append .Weight $order }}
+  {{ end }}
+  <!-- Assumes the default language will have the lowest weight -->
+  {{ $defaultLanguageIndex := index (sort $order) 0 }}
+  {{ $defaultLanguage = index (where $languages "Weight" $defaultLanguageIndex) 0 }}
+{{ end }}
+{{ return $defaultLanguage }}
