@@ -9,7 +9,5 @@
        URLs resolve to /fonts/... — the same target as the CSS's url("../fonts/..."). */ -}}
 <link rel="preload" href="{{ "fonts/Metropolis-Regular.woff2" | absURL }}" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="{{ "fonts/Metropolis-Bold.woff2" | absURL }}" as="font" type="font/woff2" crossorigin>
-{{- if .IsHome }}
-{{- /* JetBrains Mono drives the hero whoami block + chips (above the fold), home only. */}}
+{{- /* JetBrains Mono is used site-wide now (meta, sidebar marks, eyebrows, code). */}}
 <link rel="preload" href="{{ "fonts/JetBrainsMono-400.woff2" | absURL }}" as="font" type="font/woff2" crossorigin>
-{{- end }}

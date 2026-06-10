@@ -631,3 +631,128 @@ html
 
   .post_tag
     color: #ededed
+
+// ============================================================
+// Article content — reading experience tied to the identity
+// ============================================================
+
+// All code in self-hosted JetBrains Mono (specificity beats the theme's
+// `code/pre { font-family: 'Monaco' }`; _custom is imported last).
+.post_content
+  code, pre, .chroma
+    font-family: var(--font-mono)
+
+// Inline code → subtle accent pill (block code in <pre> keeps the dark theme)
+.post_content :not(pre) > code
+  font-size: 0.85em
+  padding: 0.1em 0.4em
+  border-radius: 0.35rem
+  background: rgba(55, 148, 255, 0.12)
+  border: 1px solid rgba(55, 148, 255, 0.2)
+
+// Code blocks → bordered, rounded, with a gradient top accent line
+.post_content .highlight
+  position: relative
+  border: 1px solid rgba(255, 255, 255, 0.08)
+  border-radius: 0.6rem
+  overflow: hidden
+
+  &::before
+    content: ''
+    position: absolute
+    top: 0
+    left: 0
+    right: 0
+    z-index: 1
+    height: 2px
+    background: linear-gradient(90deg, $theme, $secondary)
+
+// Content headings → gradient accent bar + breathing room
+.post_content h2
+  position: relative
+  margin-top: 2.5rem
+  margin-bottom: 0.9rem
+  padding-left: 0.9rem
+  font-weight: 700
+  line-height: 1.25
+
+  &::before
+    content: ''
+    position: absolute
+    left: 0
+    top: 0.18em
+    bottom: 0.18em
+    width: 4px
+    border-radius: 2px
+    background: linear-gradient(180deg, $theme, $secondary)
+
+.post_content h3
+  margin-top: 1.9rem
+  font-weight: 600
+
+// Blockquotes / tips → gradient bar, rounded, mode-safe color
+// (theme hardcodes color:#555 — unreadable in dark mode)
+.post_content blockquote
+  position: relative
+  border-left: none
+  border-radius: 0 0.5rem 0.5rem 0
+  padding: 1rem 1.4rem 1rem 1.6rem
+  color: inherit
+  opacity: 0.92
+
+  &::before
+    content: ''
+    position: absolute
+    left: 0
+    top: 0
+    bottom: 0
+    width: 4px
+    border-radius: 4px
+    background: linear-gradient(180deg, $theme, $secondary)
+
+// Tables → mono accent header, subtle row separators + hover
+.post_content
+  th
+    font-family: var(--font-mono)
+    font-size: 0.72rem
+    letter-spacing: 0.04em
+    text-transform: uppercase
+    text-align: left
+    background: rgba(55, 148, 255, 0.08)
+    border-bottom: 2px solid rgba(55, 148, 255, 0.32)
+
+  th, td
+    padding: 0.55rem 0.8rem
+    border-bottom: 1px solid rgba(128, 128, 128, 0.16)
+
+  tbody tr:hover
+    background: rgba(128, 128, 128, 0.06)
+
+// Content links → accent, refined underline
+.post_content .post_body a:not(.button)
+  color: $theme
+  text-decoration: underline
+  text-decoration-color: rgba(55, 148, 255, 0.4)
+  text-underline-offset: 2px
+
+  &:hover
+    color: $secondary
+    text-decoration-color: $secondary
+
+// Table of contents → refined boxed widget with a mono title
+.post_toc
+  border: 1px solid rgba(128, 128, 128, 0.18)
+  border-radius: 0.6rem
+  padding: 1rem 1.3rem
+  background: var(--post-bg)
+
+  h2
+    margin: 0 0 0.4rem
+    padding-left: 0
+    font-family: var(--font-mono)
+    font-size: 0.85rem
+    letter-spacing: 0.04em
+    text-transform: uppercase
+
+    &::before
+      display: none
