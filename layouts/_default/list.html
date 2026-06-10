@@ -1,0 +1,20 @@
+{{/* Local override: add a dark blueprint page-header band above the archive,
+     matching the home's aesthetic, then the (now card-grid) post list. */}}
+{{ define "main" }}
+{{- $eyebrow := "Blog" -}}
+{{- $title := .Title -}}
+{{- if eq .Kind "term" -}}
+  {{- $eyebrow = .Data.Singular | default "tag" | title -}}
+{{- else if and (eq .Kind "section") (eq .Section "posts") -}}
+  {{- $title = "Articles" -}}
+{{- end -}}
+<header class="page_head">
+  <div class="page_head_grid" aria-hidden="true"></div>
+  <div class="page_head_inner">
+    <p class="page_eyebrow">◆ {{ $eyebrow }}</p>
+    <h1 class="page_head_title">{{ $title | markdownify }}</h1>
+    <p class="page_head_sub">{{ len .Pages }} billet{{ if gt (len .Pages) 1 }}s{{ end }}</p>
+  </div>
+</header>
+{{- partial "archive" . }}
+{{ end }}

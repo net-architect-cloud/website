@@ -37,16 +37,15 @@ html[data-mode="dim"] .follow
 $post-shadow: 0 0.25rem 1rem rgba(0, 0, 0, 0.08)
 $post-shadow-hover: 0 0.4rem 1.2rem rgba(0, 0, 0, 0.12)
 
-.post_item
-  border: 1px solid rgba(128, 128, 128, 0.18)
-  border-radius: 0.8rem
-  overflow: hidden
-  box-shadow: $post-shadow
-  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease
+// Blog / taxonomy list → responsive grid of the home-style .fcard cards
+.posts
+  display: grid
+  grid-template-columns: repeat(auto-fill, minmax(16rem, 1fr))
+  gap: 1.3rem
+  padding: 0
 
-  &:hover
-    box-shadow: $post-shadow-hover
-    border-color: rgba(55, 148, 255, 0.4)
+  > li:last-child
+    grid-column: 1 / -1
 
 .image_thumbnail
   border-radius: 0.5rem
@@ -413,8 +412,7 @@ html
   margin: 0 0 0.5rem
   font-family: var(--font-mono)
   font-size: 0.72rem
-  color: var(--light)
-  opacity: 0.6
+  opacity: 0.62
 
 .fcard_tag
   padding: 0.1rem 0.5rem
@@ -432,8 +430,7 @@ html
   margin: 0 0 0.8rem
   font-size: 0.95rem
   line-height: 1.55
-  color: var(--light)
-  opacity: 0.7
+  opacity: 0.72
 
 .fcard_more
   font-family: var(--font-mono)
@@ -547,17 +544,90 @@ html
     color: $secondary
     font-size: 0.8em
 
-// Page / article titles → subtle blue→purple accent hairline underneath
-.post_title
+// Dark blueprint page-header band (blog/taxonomy lists + single articles),
+// same identity as the home hero. Always dark, independent of site mode.
+.page_head
   position: relative
-  padding-bottom: 0.6rem
+  isolation: isolate
+  overflow: hidden
+  text-align: center
+  background: #121317
+  color: #ededed
+  border-bottom: 1px solid #26282e
+  padding: clamp(2.4rem, 5vw, 3.6rem) 1.5rem clamp(2rem, 4vw, 2.8rem)
+
+  .page_head_grid
+    position: absolute
+    inset: 0
+    z-index: -2
+    background-image: linear-gradient(rgba(255, 255, 255, 0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(255, 255, 255, 0.04) 1px, transparent 1px)
+    background-size: 42px 42px
+    background-position: center top
+    -webkit-mask-image: radial-gradient(ellipse 90% 85% at 50% 0%, #000 35%, transparent 100%)
+    mask-image: radial-gradient(ellipse 90% 85% at 50% 0%, #000 35%, transparent 100%)
 
   &::after
     content: ''
     position: absolute
-    left: 0
+    inset: 0
+    z-index: -1
+    pointer-events: none
+    background: radial-gradient(32rem 15rem at 26% 0%, rgba(55, 148, 255, 0.14), transparent 60%), radial-gradient(28rem 15rem at 76% 8%, rgba(177, 128, 215, 0.12), transparent 60%)
+
+.page_head_inner
+  max-width: 46rem
+  margin: 0 auto
+
+.page_head_inner--wide
+  max-width: 54rem
+
+.page_eyebrow
+  margin: 0 0 0.7rem
+  font-family: var(--font-mono)
+  font-size: 0.78rem
+  letter-spacing: 0.08em
+  text-transform: uppercase
+  color: $theme
+
+.page_head_title
+  position: relative
+  display: inline-block
+  margin: 0
+  padding-bottom: 0.7rem
+  font-size: clamp(1.9rem, 5vw, 3.1rem)
+  line-height: 1.12
+  font-weight: 700
+  letter-spacing: -0.015em
+  color: #f4f4f6
+
+  &::after
+    content: ''
+    position: absolute
+    left: 50%
     bottom: 0
+    transform: translateX(-50%)
     width: 3.5rem
     height: 2px
     border-radius: 2px
     background: linear-gradient(90deg, $theme, $secondary)
+
+.page_head_sub
+  margin: 0.9rem 0 0
+  font-family: var(--font-mono)
+  font-size: 0.8rem
+  opacity: 0.62
+
+// post-meta lifted into the dark band → light + centered
+.page_head .post_meta
+  justify-content: center
+  margin-top: 1rem
+  color: rgba(255, 255, 255, 0.64)
+
+  a, span, time
+    color: inherit
+
+  svg
+    fill: currentColor
+
+  .post_tag
+    color: #ededed
